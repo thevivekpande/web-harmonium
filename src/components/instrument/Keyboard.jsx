@@ -1,0 +1,40 @@
+import React from 'react';
+import { NOTES, RAGAS } from '../../data/constants';
+
+export default function Keyboard({ activeKeys, ragaId, handlePointerDown, handlePointerUp }) {
+  const activeRaga = RAGAS.find(r => r.id === ragaId);
+
+  return (
+    <div className="keyboard-section">
+      <div className="keyboard-container">
+        {NOTES.map((note) => {
+          const isActive = activeKeys.has(note.key);
+          const isRagaNote = activeRaga.scale.includes(note.name.replace(/\d/g, ''));
+
+          return (
+            <div
+              key={note.name}
+              className={`key key-${note.type} ${isActive ? 'active' : ''}`}
+              onPointerDown={(e) => {
+                e.preventDefault();
+                handlePointerDown(note.key, note.freq);
+              }}
+              onPointerUp={(e) => {
+                e.preventDefault();
+                handlePointerUp(note.key);
+              }}
+              onPointerLeave={(e) => {
+                e.preventDefault();
+                if (isActive) handlePointerUp(note.key);
+              }}
+            >
+              {isRagaNote && <div className="raga-highlight" title={`Part of ${activeRaga.name}`} />}
+              <span className="key-hint">{note.key.toUpperCase()}</span>
+              <span className="key-label">{note.label}</span>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
