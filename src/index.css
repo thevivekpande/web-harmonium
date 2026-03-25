@@ -117,6 +117,26 @@ body {
   height: 100%;
 }
 
+.developer-link {
+  color: var(--color-mahogany);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border: 1px solid rgba(197, 160, 89, 0.5);
+  border-radius: 999px;
+  padding: 10px 16px;
+  transition: color 0.2s ease, border-color 0.2s ease, background-color 0.2s ease, transform 0.2s ease;
+}
+
+.developer-link:hover {
+  color: var(--color-ivory);
+  background-color: var(--color-mahogany);
+  border-color: var(--color-mahogany);
+  transform: translateY(-1px);
+}
+
 .nav-tab {
   display: flex;
   align-items: center;
@@ -156,16 +176,58 @@ body {
 .workspace {
   flex: 1;
   display: flex;
-  padding: 40px;
-  gap: 40px;
-  min-height: 400px;
+  padding: 28px 40px 20px;
+  gap: 28px;
+  min-height: 340px;
+}
+
+.instrument-shell {
+  --lid-angle: 74deg;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  perspective: 1600px;
+  perspective-origin: center 30%;
+  margin-top: -10px;
+  background-image:
+    radial-gradient(circle at top, rgba(221, 193, 133, 0.18), transparent 35%),
+    linear-gradient(180deg, rgba(74, 46, 42, 0.05), transparent 22%);
+}
+
+.instrument-lid {
+  position: relative;
+  transform-origin: bottom center;
+  transform-style: preserve-3d;
+  transform: rotateX(calc(var(--lid-angle) - 90deg));
+  transition: transform 300ms ease, filter 300ms ease;
+  filter: drop-shadow(0 26px 20px rgba(30, 17, 14, 0.18));
+  z-index: 2;
+}
+
+.instrument-base {
+  position: relative;
+  flex: 1;
+  z-index: 1;
+  margin-top: -8px;
+  background-color: var(--color-mahogany-dark);
+}
+
+.instrument-hinge {
+  height: 18px;
+  margin: 0 48px;
+  border-radius: 0 0 14px 14px;
+  background:
+    linear-gradient(180deg, rgba(221, 193, 133, 0.85), rgba(140, 113, 59, 0.92));
+  box-shadow:
+    inset 0 2px 2px rgba(255,255,255,0.3),
+    0 6px 10px rgba(0,0,0,0.18);
 }
 
 .raga-card, .tuning-panel {
   flex: 1;
   background-color: var(--color-ivory-dark);
   border-radius: 20px;
-  padding: 32px;
+  padding: 24px;
   box-shadow: var(--shadow-md);
   border: 1px solid var(--color-brass-light);
   display: flex;
@@ -201,8 +263,8 @@ body {
 }
 
 .raga-card h2 {
-  margin: 0 0 16px 0;
-  font-size: 42px;
+  margin: 0 0 12px 0;
+  font-size: 34px;
   color: var(--color-mahogany-dark);
 }
 
@@ -215,8 +277,9 @@ body {
 
 .raga-card p {
   color: #555;
-  line-height: 1.6;
-  margin-bottom: 24px;
+  line-height: 1.5;
+  margin-bottom: 18px;
+  font-size: 14px;
 }
 
 .masterclass-btn {
@@ -225,10 +288,10 @@ body {
   background-color: var(--color-mahogany);
   color: var(--color-ivory);
   border: none;
-  padding: 12px 24px;
+  padding: 10px 18px;
   border-radius: 50px;
   font-weight: 600;
-  font-size: 14px;
+  font-size: 13px;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -253,11 +316,11 @@ body {
 
 .bellows {
   width: 100%;
-  height: 250px;
+  height: 220px;
   background: var(--color-mahogany);
   border-radius: 12px;
   display: flex;
-  padding: 20px 40px;
+  padding: 16px 28px;
   gap: 10px;
   box-shadow: inset 0 10px 20px rgba(0,0,0,0.5), var(--shadow-lg);
   overflow: hidden;
@@ -306,12 +369,12 @@ body {
 
 /* Tuning Panel */
 .tuning-panel {
-  gap: 24px;
+  gap: 18px;
 }
 
 .tuning-panel h3 {
   margin: 0 0 8px 0;
-  font-size: 24px;
+  font-size: 21px;
   color: var(--color-mahogany-dark);
 }
 
@@ -369,6 +432,26 @@ input:checked + .slider:before { transform: translateX(22px); }
   accent-color: var(--color-brass);
 }
 
+.slider-group {
+  background: rgba(255,255,255,0.45);
+  padding: 12px 16px 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(197, 160, 89, 0.3);
+}
+
+.slider-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.slider-value {
+  color: var(--color-brass-dark);
+  font-weight: 700;
+  font-size: 13px;
+}
+
 /* Keyboard Section */
 .keyboard-section {
   height: 280px;
@@ -382,6 +465,7 @@ input:checked + .slider:before { transform: translateX(22px); }
   user-select: none;
   -webkit-user-select: none;
   overflow-x: auto;
+  border-top: 1px solid rgba(221, 193, 133, 0.35);
 }
 
 .keyboard-container {
@@ -567,7 +651,149 @@ input:checked + .slider:before { transform: translateX(22px); }
 }
 
 /* Mobile Responsive Adjustments */
+@media (max-width: 1280px) {
+  .header {
+    height: 72px;
+    padding: 0 28px;
+  }
+
+  .logo-title {
+    font-size: 24px;
+  }
+
+  .nav-tabs {
+    gap: 20px;
+  }
+
+  .nav-tab {
+    font-size: 13px;
+  }
+
+  .developer-link {
+    font-size: 12px;
+    padding: 9px 14px;
+  }
+
+  .workspace {
+    padding: 20px 24px 16px;
+    gap: 20px;
+    min-height: 290px;
+  }
+
+  .raga-card,
+  .tuning-panel {
+    padding: 20px;
+    border-radius: 16px;
+  }
+
+  .raga-card h2 {
+    font-size: 30px;
+  }
+
+  .bellows {
+    height: 180px;
+    padding: 14px 20px;
+  }
+
+  .instrument-hinge {
+    margin: 0 28px;
+  }
+
+  .keyboard-section {
+    height: 236px;
+    padding: 20px 24px;
+  }
+
+  .keyboard-container {
+    padding: 6px;
+  }
+
+  .key {
+    padding-bottom: 16px;
+  }
+
+  .key-white {
+    width: 48px;
+    height: 194px;
+  }
+
+  .key-black {
+    width: 30px;
+    height: 116px;
+    margin-left: -15px;
+    margin-right: -15px;
+    padding-bottom: 10px;
+    font-size: 10px;
+  }
+
+  .key-label {
+    font-size: 9px;
+  }
+}
+
+@media (max-width: 1280px) and (max-height: 820px) {
+  .workspace {
+    padding: 16px 20px 12px;
+    gap: 16px;
+    min-height: 250px;
+  }
+
+  .raga-card,
+  .tuning-panel {
+    padding: 16px;
+  }
+
+  .raga-card h2 {
+    font-size: 26px;
+    margin-bottom: 10px;
+  }
+
+  .raga-card p {
+    margin-bottom: 16px;
+    font-size: 14px;
+    line-height: 1.45;
+  }
+
+  .bellows {
+    height: 150px;
+  }
+
+  .tuning-panel {
+    gap: 16px;
+  }
+
+  .keyboard-section {
+    height: 208px;
+    padding: 16px 20px;
+  }
+
+  .key-white {
+    width: 42px;
+    height: 168px;
+  }
+
+  .key-black {
+    width: 26px;
+    height: 98px;
+    margin-left: -13px;
+    margin-right: -13px;
+  }
+}
+
 @media (max-width: 900px) {
+  .instrument-shell {
+    perspective: none;
+  }
+
+  .instrument-lid {
+    transform: none;
+    filter: none;
+  }
+
+  .instrument-hinge {
+    margin: 0 16px;
+  }
+
   .workspace {
     flex-direction: column;
     padding: 20px;
@@ -609,6 +835,11 @@ input:checked + .slider:before { transform: translateX(22px); }
 
   .nav-tabs {
     display: none;
+  }
+
+  .developer-link {
+    font-size: 12px;
+    padding: 8px 12px;
   }
 
   .workspace {

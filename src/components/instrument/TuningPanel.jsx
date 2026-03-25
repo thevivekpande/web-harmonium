@@ -49,6 +49,24 @@ export default function TuningPanel({ settings, setSettings, setPumping }) {
           </label>
         </div>
       </div>
+
+      <div className="control-group" style={{ marginTop: '16px' }}>
+        <span className="control-label">Instrument Body</span>
+        <div className="slider-group">
+          <div className="slider-row">
+            <span className="switch-label">Lid Angle</span>
+            <span className="slider-value">{settings.lidAngle}deg</span>
+          </div>
+          <input
+            className="range-slider"
+            type="range"
+            min="38"
+            max="90"
+            value={settings.lidAngle}
+            onChange={(e) => setSettings((s) => ({ ...s, lidAngle: Number(e.target.value) }))}
+          />
+        </div>
+      </div>
       
       <button 
         className="mobile-pump-btn"

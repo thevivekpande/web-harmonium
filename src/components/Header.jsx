@@ -26,6 +26,14 @@ export default function Header({ currentTab, setCurrentTab }) {
           Lessons
         </div>
       </div>
+      <a
+        className="developer-link"
+        href="https://www.linkedin.com/in/thevivekpande/"
+        target="_blank"
+        rel="noreferrer"
+      >
+        Developer
+      </a>
     </div>
   );
 }

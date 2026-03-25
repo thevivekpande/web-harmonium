@@ -31,7 +31,8 @@ function App() {
     bass: true,
     drone: false,
     volume: 0.8,
-    transpose: 0
+    transpose: 0,
+    lidAngle: 74
   });
 
   // Manage tab changes to reset sub-views
