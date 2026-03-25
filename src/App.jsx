@@ -22,7 +22,7 @@ function App() {
   const [currentTab, setCurrentTab] = useState('inventory');
   const [activeLesson, setActiveLesson] = useState(null);
   
-  const [ragaId, setRagaId] = useState('bhairav');
+  const [ragaId, setRagaId] = useState('free_play');
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isPumping, setPumping] = useState(false);
   

@@ -9,7 +9,7 @@ export default function Keyboard({ activeKeys, ragaId, handlePointerDown, handle
       <div className="keyboard-container">
         {NOTES.map((note) => {
           const isActive = activeKeys.has(note.key);
-          const isRagaNote = activeRaga.scale.includes(note.name.replace(/\d/g, ''));
+          const isRagaNote = activeRaga.id !== 'free_play' && activeRaga.scale.includes(note.name.replace(/\d/g, ''));
 
           return (
             <div

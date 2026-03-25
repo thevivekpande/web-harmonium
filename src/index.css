@@ -375,12 +375,13 @@ input:checked + .slider:before { transform: translateX(22px); }
   background-color: var(--color-mahogany-dark);
   padding: 30px 40px;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   box-shadow: inset 0 10px 20px rgba(0,0,0,0.5);
   position: relative;
   flex-shrink: 0;
   user-select: none;
   -webkit-user-select: none;
+  overflow-x: auto;
 }
 
 .keyboard-container {
@@ -390,6 +391,7 @@ input:checked + .slider:before { transform: translateX(22px); }
   border-radius: 8px;
   box-shadow: 0 20px 30px rgba(0,0,0,0.4);
   position: relative;
+  margin: 0 auto;
 }
 
 .key {
@@ -404,6 +406,7 @@ input:checked + .slider:before { transform: translateX(22px); }
   padding-bottom: 20px;
   font-weight: 600;
   font-size: 14px;
+  flex-shrink: 0;
 }
 
 .raga-highlight {
