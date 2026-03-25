@@ -547,7 +547,7 @@ input:checked + .slider:before { transform: translateX(22px); }
 }
 
 .keyboard-fullscreen-btn {
-  display: none;
+  display: inline-flex;
   position: absolute;
   top: 10px;
   right: 10px;
@@ -559,7 +559,41 @@ input:checked + .slider:before { transform: translateX(22px); }
   color: #f7ecdb;
   align-items: center;
   justify-content: center;
-  z-index: 5;
+  z-index: 205;
+  cursor: pointer;
+}
+
+.keyboard-section-fullscreen {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  width: 100vw;
+  width: 100dvw;
+  height: 100vh;
+  height: 100dvh;
+  padding: 32px;
+  box-sizing: border-box;
+  background: #000;
+  align-items: center;
+  justify-content: center;
+  overflow: auto;
+}
+
+.keyboard-section-fullscreen .keyboard-fullscreen-btn {
+  top: 18px;
+  right: 18px;
+  background: rgba(20, 20, 20, 0.94);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.keyboard-section-fullscreen .keyboard-container {
+  transform: none;
+  margin: auto;
+  min-width: max-content;
+}
+
+.keyboard-section-fullscreen.piano-keyboard-section {
+  background: #000;
 }
 
 .keyboard-container {
