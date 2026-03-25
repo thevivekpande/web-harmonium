@@ -9,6 +9,7 @@ import SettingsModal from './components/SettingsModal';
 
 // Views
 import InstrumentView from './components/views/InstrumentView';
+import PianoView from './components/views/PianoView';
 import LibraryView from './components/views/LibraryView';
 import LessonsView from './components/views/LessonsView';
 import LessonDetail from './components/views/LessonDetail';
@@ -16,6 +17,12 @@ import LessonDetail from './components/views/LessonDetail';
 import './index.css';
 
 const synth = new HarmoniumSynth();
+const VALID_TABS = new Set(['inventory', 'piano', 'library', 'lessons']);
+
+const getTabFromHash = () => {
+  const hashTab = window.location.hash.replace('#', '');
+  return VALID_TABS.has(hashTab) ? hashTab : 'inventory';
+};
 
 const setMetaTag = (selector, attribute, value) => {
   const element = document.querySelector(selector);
@@ -26,7 +33,7 @@ const setMetaTag = (selector, attribute, value) => {
 
 function App() {
   const [activeKeys, setActiveKeys] = useState(new Set());
-  const [currentTab, setCurrentTab] = useState('inventory');
+  const [currentTab, setCurrentTab] = useState(getTabFromHash);
   const [activeLesson, setActiveLesson] = useState(null);
   
   const [ragaId, setRagaId] = useState('free_play');
@@ -51,6 +58,26 @@ function App() {
   };
 
   useEffect(() => {
+    const syncTabFromHash = () => {
+      const nextTab = getTabFromHash();
+      setCurrentTab(nextTab);
+      if (nextTab !== 'lessons') {
+        setActiveLesson(null);
+      }
+    };
+
+    window.addEventListener('hashchange', syncTabFromHash);
+    return () => window.removeEventListener('hashchange', syncTabFromHash);
+  }, []);
+
+  useEffect(() => {
+    const nextHash = `#${currentTab}`;
+    if (window.location.hash !== nextHash) {
+      window.location.hash = nextHash;
+    }
+  }, [currentTab]);
+
+  useEffect(() => {
     const unlock = () => { synth.init(); };
     window.addEventListener('pointerdown', unlock);
     window.addEventListener('keydown', unlock);
@@ -71,9 +98,9 @@ function App() {
         next.add(key);
         return next;
       });
-      synth.playNote(key, noteMap.freq, settings);
+      synth.playNote(key, noteMap.freq, settings, currentTab === 'piano' ? 'piano' : 'harmonium');
     }
-  }, [settings, isSettingsOpen]);
+  }, [settings, isSettingsOpen, currentTab]);
 
   const handleKeyUp = useCallback((e) => {
     const key = e.key.toLowerCase();
@@ -97,9 +124,9 @@ function App() {
   }, [handleKeyDown, handleKeyUp]);
 
   useEffect(() => {
-    synth.toggleDrone(settings.drone, settings.volume);
+    synth.toggleDrone(currentTab === 'inventory' && settings.drone, settings.volume);
     synth.setVolume(settings.volume);
-  }, [settings.drone, settings.volume]);
+  }, [currentTab, settings.drone, settings.volume]);
 
   useEffect(() => {
     const lesson = LESSONS.find((item) => item.id === activeLesson);
@@ -111,6 +138,10 @@ function App() {
         description: raga?.id === 'free_play'
           ? 'Play a virtual Indian harmonium online with responsive keys, drone controls, bellows feel, and guided raga practice.'
           : `Practice Raag ${raga.name} on a virtual harmonium with scale highlighting, playable keys, and Indian classical learning support.`
+      },
+      piano: {
+        title: 'Virtual Piano | Harmonium Pro',
+        description: 'Play a virtual piano online with the same mapped keyboard layout for melody sketching, note testing, and quick practice.'
       },
       library: {
         title: 'Practice Library | Harmonium Pro',
@@ -138,7 +169,7 @@ function App() {
 
   const handlePointerDown = (key, freq) => {
     setActiveKeys(prev => new Set(prev).add(key));
-    synth.playNote(key, freq, settings);
+    synth.playNote(key, freq, settings, currentTab === 'piano' ? 'piano' : 'harmonium');
   };
 
   const handlePointerUp = (key) => {
@@ -164,15 +195,25 @@ function App() {
         currentTab={currentTab} 
         setCurrentTab={handleSetTab} 
         setIsSettingsOpen={setIsSettingsOpen} 
+        showPianoBadge={currentTab !== 'piano'}
       />
 
       <div className="main-content">
         <Header 
           currentTab={currentTab} 
           setCurrentTab={handleSetTab} 
+          showPianoBadge={currentTab !== 'piano'}
         />
 
         {currentTab === 'library' && <LibraryView />}
+
+        {currentTab === 'piano' && (
+          <PianoView
+            activeKeys={activeKeys}
+            handlePointerDown={handlePointerDown}
+            handlePointerUp={handlePointerUp}
+          />
+        )}
         
         {currentTab === 'lessons' && !activeLesson && (
           <LessonsView setActiveLesson={setActiveLesson} />

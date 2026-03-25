@@ -60,6 +60,7 @@ body {
   color: var(--color-brass-light);
   width: 48px;
   height: 48px;
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -77,6 +78,21 @@ body {
 .sidebar-icon.active {
   background-color: var(--color-brass);
   color: var(--color-mahogany-dark);
+}
+
+.sidebar-badge {
+  position: absolute;
+  top: -4px;
+  right: -6px;
+  padding: 2px 6px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #f5d7a6, #c98a3f);
+  color: #3d2711;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  line-height: 1;
+  text-transform: uppercase;
 }
 
 /* Main Content */
@@ -140,6 +156,8 @@ body {
 .nav-tab {
   display: flex;
   align-items: center;
+  justify-content: center;
+  gap: 8px;
   height: 100%;
   font-weight: 500;
   color: var(--color-mahogany);
@@ -149,6 +167,29 @@ body {
   letter-spacing: 0.5px;
   text-transform: uppercase;
   transition: color 0.2s;
+}
+
+.nav-tab.has-badge {
+  padding-top: 16px;
+}
+
+.nav-tab-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #1d1714, #6d4b2c);
+  color: #fdf4e8;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  line-height: 1;
+  text-transform: uppercase;
 }
 
 .nav-tab:hover {
@@ -585,6 +626,117 @@ input:checked + .slider:before { transform: translateX(22px); }
   margin-top: 4px;
 }
 
+.piano-page {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 28px 36px 32px;
+  background:
+    radial-gradient(circle at top left, rgba(196, 208, 226, 0.5), transparent 30%),
+    linear-gradient(180deg, #f6f2ea 0%, #efe5d7 100%);
+}
+
+.piano-stage {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(280px, 0.8fr);
+  gap: 20px;
+}
+
+.piano-panel {
+  background: rgba(255, 252, 246, 0.88);
+  border: 1px solid rgba(31, 31, 31, 0.08);
+  border-radius: 24px;
+  padding: 28px;
+  box-shadow: 0 20px 40px rgba(27, 20, 15, 0.08);
+}
+
+.piano-panel h2,
+.piano-panel h3 {
+  margin: 0 0 12px 0;
+  color: #1d1714;
+}
+
+.piano-panel p {
+  margin: 0;
+  color: rgba(29, 23, 20, 0.78);
+  line-height: 1.6;
+}
+
+.piano-panel-secondary {
+  background: linear-gradient(180deg, rgba(42, 42, 42, 0.94), rgba(20, 20, 20, 0.96));
+  color: #f7f0e6;
+}
+
+.piano-panel-secondary h3,
+.piano-panel-secondary .piano-eyebrow,
+.piano-panel-secondary li {
+  color: inherit;
+}
+
+.piano-eyebrow {
+  display: inline-block;
+  margin-bottom: 12px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #8c6137;
+}
+
+.piano-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.piano-meta span {
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(140, 97, 55, 0.1);
+  color: #5f4024;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.piano-list {
+  margin: 0;
+  padding-left: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  line-height: 1.5;
+}
+
+.piano-keybed {
+  flex: 1;
+  display: flex;
+  align-items: stretch;
+  min-height: 0;
+  border-radius: 30px;
+  padding: 20px;
+  background:
+    linear-gradient(180deg, #302620 0%, #181311 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.12),
+    0 24px 50px rgba(21, 16, 12, 0.24);
+}
+
+.piano-keyboard-section {
+  padding: 12px 12px 4px;
+  align-items: center;
+}
+
+.piano-keyboard-container {
+  background: linear-gradient(180deg, #3a3028 0%, #1b1714 100%);
+  border-radius: 18px;
+  padding: 16px;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.08),
+    0 18px 34px rgba(0,0,0,0.35);
+}
+
 /* Other Pages (Library, Lessons) */
 .page-container {
   flex: 1;
@@ -766,6 +918,14 @@ input:checked + .slider:before { transform: translateX(22px); }
   .key-label {
     font-size: 9px;
   }
+
+  .piano-page {
+    padding: 22px 24px 28px;
+  }
+
+  .piano-stage {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 1280px) and (max-height: 820px) {
@@ -919,6 +1079,19 @@ input:checked + .slider:before { transform: translateX(22px); }
   .workspace {
     padding: 16px;
     gap: 16px;
+  }
+
+  .piano-page {
+    padding: 18px 16px 24px;
+    gap: 16px;
+  }
+
+  .piano-panel {
+    padding: 22px 18px;
+  }
+
+  .piano-keybed {
+    padding: 12px;
   }
 
   .keyboard-section {

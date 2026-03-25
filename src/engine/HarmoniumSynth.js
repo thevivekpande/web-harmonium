@@ -32,6 +32,33 @@ export class HarmoniumSynth {
     }
   }
 
+  createPianoVoice(freq, harmonic = 1, gain = 0.2, decay = 1.4, detune = 0) {
+    if (!this.ctx) return null;
+    const osc = this.ctx.createOscillator();
+    const gainNode = this.ctx.createGain();
+    const filter = this.ctx.createBiquadFilter();
+
+    osc.type = harmonic === 1 ? 'triangle' : 'sine';
+    osc.frequency.setValueAtTime(freq * harmonic, this.ctx.currentTime);
+    osc.detune.setValueAtTime(detune, this.ctx.currentTime);
+
+    filter.type = 'lowpass';
+    filter.frequency.setValueAtTime(Math.max(1800, 4200 - harmonic * 320), this.ctx.currentTime);
+    filter.Q.value = 0.8;
+
+    osc.connect(filter);
+    filter.connect(gainNode);
+    gainNode.connect(this.masterGain);
+
+    gainNode.gain.setValueAtTime(0.0001, this.ctx.currentTime);
+    gainNode.gain.linearRampToValueAtTime(gain, this.ctx.currentTime + 0.01);
+    gainNode.gain.exponentialRampToValueAtTime(Math.max(gain * 0.28, 0.0001), this.ctx.currentTime + 0.14);
+    gainNode.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + decay);
+
+    osc.start();
+    return { osc, gainNode };
+  }
+
   createReed(freq, type = 'sawtooth', detune = 0, gain = 0.5) {
     if (!this.ctx) return null;
     const osc = this.ctx.createOscillator();
@@ -56,7 +83,7 @@ export class HarmoniumSynth {
     return { osc, gainNode };
   }
 
-  playNote(noteKey, baseFreq, settings) {
+  playNote(noteKey, baseFreq, settings, instrument = 'harmonium') {
     this.init();
     if (!this.initialized || this.ctx.state === 'suspended') return;
     if (this.oscillators.has(noteKey)) return;
@@ -65,12 +92,19 @@ export class HarmoniumSynth {
     this.setVolume(settings.volume);
 
     const nodes = {};
-    if (settings.male) {
-      nodes.male = this.createReed(freq, 'sawtooth', 0, 0.4);
-      nodes.maleSecondary = this.createReed(freq, 'sawtooth', 5, 0.1); 
-    }
-    if (settings.bass) {
-      nodes.bass = this.createReed(freq / 2, 'sawtooth', -5, 0.3);
+    if (instrument === 'piano') {
+      nodes.fundamental = this.createPianoVoice(freq, 1, 0.34, 1.9, 0);
+      nodes.second = this.createPianoVoice(freq, 2, 0.12, 1.3, 4);
+      nodes.third = this.createPianoVoice(freq, 3, 0.08, 1.0, -3);
+      nodes.presence = this.createPianoVoice(freq, 4, 0.04, 0.8, 2);
+    } else {
+      if (settings.male) {
+        nodes.male = this.createReed(freq, 'sawtooth', 0, 0.4);
+        nodes.maleSecondary = this.createReed(freq, 'sawtooth', 5, 0.1); 
+      }
+      if (settings.bass) {
+        nodes.bass = this.createReed(freq / 2, 'sawtooth', -5, 0.3);
+      }
     }
     this.oscillators.set(noteKey, nodes);
   }

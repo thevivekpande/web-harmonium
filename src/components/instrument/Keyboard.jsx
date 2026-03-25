@@ -1,12 +1,18 @@
 import React from 'react';
 import { NOTES, RAGAS } from '../../data/constants';
 
-export default function Keyboard({ activeKeys, ragaId, handlePointerDown, handlePointerUp }) {
-  const activeRaga = RAGAS.find(r => r.id === ragaId);
+export default function Keyboard({ activeKeys, ragaId, handlePointerDown, handlePointerUp, variant = 'harmonium' }) {
+  const activeRaga = RAGAS.find(r => r.id === ragaId) || RAGAS[0];
+  const sectionClassName = variant === 'piano'
+    ? 'keyboard-section piano-keyboard-section'
+    : 'keyboard-section';
+  const containerClassName = variant === 'piano'
+    ? 'keyboard-container piano-keyboard-container'
+    : 'keyboard-container';
 
   return (
-    <div className="keyboard-section">
-      <div className="keyboard-container">
+    <div className={sectionClassName}>
+      <div className={containerClassName}>
         {NOTES.map((note) => {
           const isActive = activeKeys.has(note.key);
           const isRagaNote = activeRaga.id !== 'free_play' && activeRaga.scale.includes(note.name.replace(/\d/g, ''));

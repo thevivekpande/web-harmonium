@@ -1,7 +1,7 @@
 import React from 'react';
-import { Home, Library, BookOpen, Settings } from 'lucide-react';
+import { Home, Music, Library, BookOpen, Settings } from 'lucide-react';
 
-export default function Sidebar({ currentTab, setCurrentTab, setIsSettingsOpen }) {
+export default function Sidebar({ currentTab, setCurrentTab, setIsSettingsOpen, showPianoBadge }) {
   return (
     <div className="sidebar">
       <div 
@@ -9,6 +9,13 @@ export default function Sidebar({ currentTab, setCurrentTab, setIsSettingsOpen }
         onClick={() => setCurrentTab('inventory')}
       >
         <Home size={24} />
+      </div>
+      <div 
+        className={`sidebar-icon ${currentTab === 'piano' ? 'active' : ''}`} 
+        onClick={() => setCurrentTab('piano')}
+      >
+        {showPianoBadge && <span className="sidebar-badge">New</span>}
+        <Music size={24} />
       </div>
       <div 
         className={`sidebar-icon ${currentTab === 'library' ? 'active' : ''}`} 

@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function Header({ currentTab, setCurrentTab }) {
+export default function Header({ currentTab, setCurrentTab, showPianoBadge }) {
   return (
     <div className="header">
       <div className="logo-area">
@@ -11,7 +11,14 @@ export default function Header({ currentTab, setCurrentTab }) {
           className={`nav-tab ${currentTab === 'inventory' ? 'active' : ''}`} 
           onClick={() => setCurrentTab('inventory')}
         >
-          Instrument
+          Harmonium
+        </div>
+        <div 
+          className={`nav-tab ${currentTab === 'piano' ? 'active' : ''} ${showPianoBadge ? 'has-badge' : ''}`} 
+          onClick={() => setCurrentTab('piano')}
+        >
+          {showPianoBadge && <span className="nav-tab-badge">New</span>}
+          <span>Piano</span>
         </div>
         <div 
           className={`nav-tab ${currentTab === 'library' ? 'active' : ''}`} 
