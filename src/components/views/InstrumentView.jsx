@@ -11,8 +11,6 @@ export default function InstrumentView({
   setSettings,
   settings,
   activeKeys,
-  isPumping,
-  setPumping,
   handlePointerDown,
   handlePointerUp
 }) {
@@ -26,7 +24,8 @@ export default function InstrumentView({
     maxHeight: 0
   });
   const [baseHeight, setBaseHeight] = useState(null);
-  const bellowsActive = activeKeys.size > 0 || settings.drone || isPumping;
+  const [mobilePanel, setMobilePanel] = useState('configuration');
+  const bellowsActive = activeKeys.size > 0 || settings.drone;
   const lidStyle = {
     '--lid-angle': `${settings.lidAngle}deg`
   };
@@ -102,6 +101,8 @@ export default function InstrumentView({
             setCurrentTab={setCurrentTab} 
             ragaId={ragaId} 
             setRagaId={setRagaId} 
+            expanded={mobilePanel === 'configuration'}
+            onToggle={() => setMobilePanel((value) => value === 'configuration' ? null : 'configuration')}
           />
           <Bellows 
             bellowsActive={bellowsActive} 
@@ -109,6 +110,8 @@ export default function InstrumentView({
           <TuningPanel
             settings={settings}
             setSettings={setSettings}
+            expanded={mobilePanel === 'reeds'}
+            onToggle={() => setMobilePanel((value) => value === 'reeds' ? null : 'reeds')}
           />
         </div>
         <div className="instrument-hinge" />
@@ -135,15 +138,6 @@ export default function InstrumentView({
           handlePointerUp={handlePointerUp} 
         />
       </div>
-
-      <button
-        className="mobile-pump-btn"
-        onPointerDown={() => setPumping(true)}
-        onPointerUp={() => setPumping(false)}
-        onPointerLeave={() => setPumping(false)}
-      >
-        Pump Bellows
-      </button>
     </div>
   );
 }

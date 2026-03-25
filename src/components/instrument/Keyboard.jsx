@@ -1,17 +1,71 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { Maximize2, Minimize2 } from 'lucide-react';
 import { NOTES, RAGAS } from '../../data/constants';
 
 export default function Keyboard({ activeKeys, ragaId, handlePointerDown, handlePointerUp, variant = 'harmonium' }) {
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const sectionRef = useRef(null);
   const activeRaga = RAGAS.find(r => r.id === ragaId) || RAGAS[0];
-  const sectionClassName = variant === 'piano'
-    ? 'keyboard-section piano-keyboard-section'
-    : 'keyboard-section';
+  const sectionClassName = [
+    'keyboard-section',
+    variant === 'piano' ? 'piano-keyboard-section' : '',
+    isFullscreen ? 'keyboard-section-fullscreen' : ''
+  ].filter(Boolean).join(' ');
   const containerClassName = variant === 'piano'
     ? 'keyboard-container piano-keyboard-container'
     : 'keyboard-container';
+  const FullscreenIcon = isFullscreen ? Minimize2 : Maximize2;
+
+  useEffect(() => {
+    if (!isFullscreen) {
+      if (document.fullscreenElement) {
+        document.exitFullscreen?.().catch(() => {});
+      }
+      window.screen?.orientation?.unlock?.();
+      return;
+    }
+
+    const section = sectionRef.current;
+    if (!section) {
+      return;
+    }
+
+    const enterFullscreen = async () => {
+      try {
+        if (!document.fullscreenElement) {
+          await section.requestFullscreen?.();
+        }
+      } catch (e) {}
+
+      try {
+        await window.screen?.orientation?.lock?.('landscape');
+      } catch (e) {}
+    };
+
+    enterFullscreen();
+
+    const handleFullscreenExit = () => {
+      if (!document.fullscreenElement) {
+        setIsFullscreen(false);
+      }
+    };
+
+    document.addEventListener('fullscreenchange', handleFullscreenExit);
+    return () => {
+      document.removeEventListener('fullscreenchange', handleFullscreenExit);
+    };
+  }, [isFullscreen]);
 
   return (
-    <div className={sectionClassName}>
+    <div ref={sectionRef} className={sectionClassName}>
+      <button
+        type="button"
+        className="keyboard-fullscreen-btn"
+        aria-label={isFullscreen ? 'Exit keyboard fullscreen' : 'Open keyboard fullscreen'}
+        onClick={() => setIsFullscreen((value) => !value)}
+      >
+        <FullscreenIcon size={18} />
+      </button>
       <div className={containerClassName}>
         {NOTES.map((note) => {
           const isActive = activeKeys.has(note.key);

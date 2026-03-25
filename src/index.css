@@ -306,6 +306,35 @@ body {
   flex-direction: column;
 }
 
+.mobile-card-toggle {
+  display: none;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  border: none;
+  background: transparent;
+  padding: 0;
+  color: var(--color-mahogany-dark);
+}
+
+.mobile-card-toggle-label {
+  font-family: 'Playfair Display', serif;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.mobile-card-toggle-icon {
+  transition: transform 0.2s ease;
+}
+
+.mobile-card-content {
+  display: contents;
+}
+
+.mobile-card-content-inner {
+  min-height: 0;
+}
+
 /* Raga Selector Header */
 .raga-header {
   display: flex;
@@ -416,29 +445,6 @@ body {
   transform: scaleY(0.9);
 }
 
-/* Mobile Play/Pump button */
-.mobile-pump-btn {
-  display: none;
-  width: 100%;
-  background-color: var(--color-mahogany);
-  color: var(--color-ivory);
-  padding: 24px;
-  font-size: 20px;
-  font-weight: bold;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  border: none;
-  border-radius: 16px;
-  box-shadow: var(--shadow-md);
-  margin: 20px 0;
-  text-align: center;
-  transition: background-color 0.2s, transform 0.1s;
-}
-.mobile-pump-btn:active {
-  background-color: var(--color-brass-dark);
-  transform: scale(0.98);
-}
-
 /* Tuning Panel */
 .tuning-panel {
   gap: 18px;
@@ -538,6 +544,22 @@ input:checked + .slider:before { transform: translateX(22px); }
   user-select: none;
   -webkit-user-select: none;
   overflow-x: auto;
+}
+
+.keyboard-fullscreen-btn {
+  display: none;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 38px;
+  height: 38px;
+  border: 1px solid rgba(221, 193, 133, 0.35);
+  border-radius: 12px;
+  background: rgba(29, 23, 20, 0.88);
+  color: #f7ecdb;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
 }
 
 .keyboard-container {
@@ -1025,12 +1047,20 @@ input:checked + .slider:before { transform: translateX(22px); }
   }
 
   .instrument-hinge {
-    margin: 0 16px;
+    display: none;
   }
 
   .workspace {
     flex-direction: column;
     padding: 20px;
+  }
+
+  .instrument-base {
+    margin-top: 10px;
+  }
+
+  .instrument-base-resize-handle {
+    display: none;
   }
 }
 
@@ -1081,6 +1111,51 @@ input:checked + .slider:before { transform: translateX(22px); }
     gap: 16px;
   }
 
+  .mobile-collapsible-card {
+    flex: 0 0 auto;
+    height: auto;
+    min-height: 0;
+    overflow: hidden;
+    padding: 18px;
+  }
+
+  .mobile-card-toggle {
+    display: flex;
+    padding: 4px 0;
+  }
+
+  .mobile-card-content {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.24s ease, margin-top 0.24s ease;
+    margin-top: 0;
+  }
+
+  .mobile-card-content > * {
+    overflow: hidden;
+  }
+
+  .mobile-card-content-inner {
+    overflow: hidden;
+  }
+
+  .mobile-collapsible-card.expanded .mobile-card-content {
+    grid-template-rows: 1fr;
+    margin-top: 18px;
+  }
+
+  .mobile-collapsible-card:not(.expanded) .mobile-card-content {
+    margin-top: 0;
+  }
+
+  .mobile-collapsible-card.expanded .mobile-card-toggle-icon {
+    transform: rotate(180deg);
+  }
+
+  .raga-card h2 {
+    font-size: 24px;
+  }
+
   .piano-page {
     padding: 18px 16px 24px;
     gap: 16px;
@@ -1101,6 +1176,40 @@ input:checked + .slider:before { transform: translateX(22px); }
     -webkit-overflow-scrolling: touch;
   }
 
+  .keyboard-fullscreen-btn {
+    display: inline-flex;
+  }
+
+  .keyboard-section-fullscreen {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    width: 100vw;
+    height: 100vh;
+    padding: 64px 12px 18px;
+    background:
+      linear-gradient(180deg, rgba(35, 27, 22, 0.98), rgba(16, 12, 10, 0.99));
+    align-items: center;
+    justify-content: center;
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+
+  .keyboard-section-fullscreen .keyboard-fullscreen-btn {
+    top: 14px;
+    right: 14px;
+  }
+
+  .keyboard-section-fullscreen .keyboard-container {
+    margin: auto;
+    transform: none;
+  }
+
+  .keyboard-section-fullscreen.piano-keyboard-section {
+    background:
+      linear-gradient(180deg, rgba(26, 24, 22, 0.98), rgba(10, 10, 10, 0.99));
+  }
+
   .keyboard-container {
     margin: 0 20px;
   }
@@ -1109,8 +1218,4 @@ input:checked + .slider:before { transform: translateX(22px); }
     display: none;
   }
   
-  .mobile-pump-btn {
-    display: block;
-    margin: 16px;
-  }
 }

@@ -38,7 +38,6 @@ function App() {
   
   const [ragaId, setRagaId] = useState('free_play');
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
-  const [isPumping, setPumping] = useState(false);
   
   const [settings, setSettings] = useState({
     male: true,
@@ -234,8 +233,6 @@ function App() {
             setSettings={setSettings}
             activeKeys={activeKeys}
             settings={settings}
-            isPumping={isPumping}
-            setPumping={setPumping}
             handlePointerDown={handlePointerDown}
             handlePointerUp={handlePointerUp}
           />
