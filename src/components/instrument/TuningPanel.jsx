@@ -1,16 +1,16 @@
 import React from 'react';
 
-export default function TuningPanel({ settings, setSettings, setPumping }) {
+export default function TuningPanel({ settings, setSettings }) {
   const toggleSetting = (name) => {
     setSettings(s => ({ ...s, [name]: !s[name] }));
   };
 
   return (
     <div className="tuning-panel">
-      <h3 className="serif">Sound Tuning</h3>
+      <h3 className="serif">Reeds</h3>
       
       <div className="control-group">
-        <span className="control-label">Reeds</span>
+        <span className="control-label">Reed Banks</span>
         <div className="switch-row">
           <span className="switch-label">Male (Base)</span>
           <label className="switch">
@@ -34,48 +34,6 @@ export default function TuningPanel({ settings, setSettings, setPumping }) {
           </label>
         </div>
       </div>
-
-      <div className="control-group" style={{ marginTop: '16px' }}>
-        <span className="control-label">Effects</span>
-        <div className="switch-row">
-          <span className="switch-label">Drone Base (Sa-Pa)</span>
-          <label className="switch">
-            <input 
-              type="checkbox" 
-              checked={settings.drone} 
-              onChange={() => toggleSetting('drone')} 
-            />
-            <span className="slider"></span>
-          </label>
-        </div>
-      </div>
-
-      <div className="control-group" style={{ marginTop: '16px' }}>
-        <span className="control-label">Instrument Body</span>
-        <div className="slider-group">
-          <div className="slider-row">
-            <span className="switch-label">Lid Angle</span>
-            <span className="slider-value">{settings.lidAngle}deg</span>
-          </div>
-          <input
-            className="range-slider"
-            type="range"
-            min="38"
-            max="90"
-            value={settings.lidAngle}
-            onChange={(e) => setSettings((s) => ({ ...s, lidAngle: Number(e.target.value) }))}
-          />
-        </div>
-      </div>
-      
-      <button 
-        className="mobile-pump-btn"
-        onPointerDown={() => setPumping(true)}
-        onPointerUp={() => setPumping(false)}
-        onPointerLeave={() => setPumping(false)}
-      >
-        Pump Bellows
-      </button>
     </div>
   );
 }

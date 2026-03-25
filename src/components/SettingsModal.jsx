@@ -2,6 +2,10 @@ import React from 'react';
 import { X } from 'lucide-react';
 
 export default function SettingsModal({ settings, setSettings, setIsSettingsOpen }) {
+  const toggleSetting = (name) => {
+    setSettings((s) => ({ ...s, [name]: !s[name] }));
+  };
+
   const handleSettingChange = (e, name) => {
     setSettings(s => ({ ...s, [name]: parseFloat(e.target.value) }));
   };
@@ -45,6 +49,39 @@ export default function SettingsModal({ settings, setSettings, setIsSettingsOpen
             <span style={{ minWidth: 40, fontWeight: 'bold' }}>
               {settings.transpose > 0 ? `+${settings.transpose}` : settings.transpose}
             </span>
+          </div>
+        </div>
+
+        <div className="control-group" style={{ marginBottom: 20 }}>
+          <span className="control-label">Effects</span>
+          <div className="switch-row">
+            <span className="switch-label">Drone Base (Sa-Pa)</span>
+            <label className="switch">
+              <input
+                type="checkbox"
+                checked={settings.drone}
+                onChange={() => toggleSetting('drone')}
+              />
+              <span className="slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <div className="control-group">
+          <span className="control-label">Instrument Body</span>
+          <div className="slider-group">
+            <div className="slider-row">
+              <span className="switch-label">Lid Angle</span>
+              <span className="slider-value">{settings.lidAngle}deg</span>
+            </div>
+            <input
+              className="range-slider"
+              type="range"
+              min="38"
+              max="90"
+              value={settings.lidAngle}
+              onChange={(e) => setSettings((s) => ({ ...s, lidAngle: Number(e.target.value) }))}
+            />
           </div>
         </div>
 

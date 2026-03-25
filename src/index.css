@@ -178,7 +178,8 @@ body {
   display: flex;
   padding: 28px 40px 20px;
   gap: 28px;
-  min-height: 340px;
+  min-height: 0;
+  align-items: stretch;
 }
 
 .instrument-shell {
@@ -188,7 +189,8 @@ body {
   flex-direction: column;
   perspective: 1600px;
   perspective-origin: center 30%;
-  margin-top: -10px;
+  min-height: 0;
+  margin-top: -4px;
   background-image:
     radial-gradient(circle at top, rgba(221, 193, 133, 0.18), transparent 35%),
     linear-gradient(180deg, rgba(74, 46, 42, 0.05), transparent 22%);
@@ -196,6 +198,10 @@ body {
 
 .instrument-lid {
   position: relative;
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-height: 0;
   transform-origin: bottom center;
   transform-style: preserve-3d;
   transform: rotateX(calc(var(--lid-angle) - 90deg));
@@ -206,10 +212,35 @@ body {
 
 .instrument-base {
   position: relative;
-  flex: 1;
+  display: flex;
+  flex: 0 0 auto;
+  align-items: stretch;
+  height: var(--instrument-base-height, 268px);
   z-index: 1;
   margin-top: -8px;
   background-color: var(--color-mahogany-dark);
+  box-shadow: inset 0 10px 20px rgba(0,0,0,0.5);
+  border-top: 1px solid rgba(221, 193, 133, 0.35);
+  overflow: hidden;
+}
+
+.instrument-base.resizing {
+  cursor: ns-resize;
+}
+
+.instrument-base-resize-handle {
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 112px;
+  height: 10px;
+  border: none;
+  border-radius: 999px;
+  background: rgba(221, 193, 133, 0.7);
+  box-shadow: 0 1px 8px rgba(0,0,0,0.18);
+  cursor: ns-resize;
+  z-index: 4;
 }
 
 .instrument-hinge {
@@ -308,7 +339,7 @@ body {
 
 /* Bellows */
 .bellows-container {
-  flex: 2;
+  flex: 2.4;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -454,18 +485,18 @@ input:checked + .slider:before { transform: translateX(22px); }
 
 /* Keyboard Section */
 .keyboard-section {
-  height: 280px;
-  background-color: var(--color-mahogany-dark);
-  padding: 30px 40px;
+  flex: 1;
+  height: 100%;
+  background-color: transparent;
+  padding: 30px 40px 20px;
   display: flex;
+  align-items: flex-end;
   justify-content: flex-start;
-  box-shadow: inset 0 10px 20px rgba(0,0,0,0.5);
   position: relative;
   flex-shrink: 0;
   user-select: none;
   -webkit-user-select: none;
   overflow-x: auto;
-  border-top: 1px solid rgba(221, 193, 133, 0.35);
 }
 
 .keyboard-container {
@@ -476,6 +507,8 @@ input:checked + .slider:before { transform: translateX(22px); }
   box-shadow: 0 20px 30px rgba(0,0,0,0.4);
   position: relative;
   margin: 0 auto;
+  transform: translateY(var(--keyboard-shift, 0px));
+  transition: transform 120ms ease-out;
 }
 
 .key {
@@ -631,7 +664,9 @@ input:checked + .slider:before { transform: translateX(22px); }
   padding: 30px;
   border-radius: 20px;
   width: 100%;
-  max-width: 450px;
+  max-width: 520px;
+  max-height: min(88vh, 760px);
+  overflow-y: auto;
   box-shadow: var(--shadow-lg);
   border: 2px solid var(--color-brass);
 }
@@ -677,7 +712,6 @@ input:checked + .slider:before { transform: translateX(22px); }
   .workspace {
     padding: 20px 24px 16px;
     gap: 20px;
-    min-height: 290px;
   }
 
   .raga-card,
@@ -699,8 +733,11 @@ input:checked + .slider:before { transform: translateX(22px); }
     margin: 0 28px;
   }
 
+  .instrument-base {
+    height: var(--instrument-base-height, 224px);
+  }
+
   .keyboard-section {
-    height: 236px;
     padding: 20px 24px;
   }
 
@@ -732,10 +769,13 @@ input:checked + .slider:before { transform: translateX(22px); }
 }
 
 @media (max-width: 1280px) and (max-height: 820px) {
+  .instrument-shell {
+    margin-top: -14px;
+  }
+
   .workspace {
-    padding: 16px 20px 12px;
+    padding: 14px 40px 10px;
     gap: 16px;
-    min-height: 250px;
   }
 
   .raga-card,
@@ -755,28 +795,62 @@ input:checked + .slider:before { transform: translateX(22px); }
   }
 
   .bellows {
-    height: 150px;
+    height: 136px;
   }
 
   .tuning-panel {
     gap: 16px;
   }
 
+  .instrument-base {
+    height: var(--instrument-base-height, 192px);
+  }
+
   .keyboard-section {
-    height: 208px;
-    padding: 16px 20px;
+    padding: 14px 20px;
   }
 
   .key-white {
-    width: 42px;
-    height: 168px;
+    width: 40px;
+    height: 154px;
   }
 
   .key-black {
-    width: 26px;
-    height: 98px;
-    margin-left: -13px;
-    margin-right: -13px;
+    width: 24px;
+    height: 88px;
+    margin-left: -12px;
+    margin-right: -12px;
+  }
+}
+
+@media (max-height: 720px) {
+  .instrument-shell {
+    margin-top: -20px;
+  }
+
+  .workspace {
+    padding-bottom: 8px;
+  }
+
+  .bellows {
+    height: 120px;
+  }
+
+  .instrument-base {
+    height: var(--instrument-base-height, 176px);
+  }
+
+  .keyboard-section {
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+
+  .key-white {
+    height: 142px;
+  }
+
+  .key-black {
+    height: 82px;
   }
 }
 
@@ -864,5 +938,6 @@ input:checked + .slider:before { transform: translateX(22px); }
   
   .mobile-pump-btn {
     display: block;
+    margin: 16px;
   }
 }

@@ -39,7 +39,7 @@ function App() {
     drone: false,
     volume: 0.8,
     transpose: 0,
-    lidAngle: 74
+    lidAngle: 90
   });
 
   // Manage tab changes to reset sub-views
@@ -190,9 +190,9 @@ function App() {
             setCurrentTab={handleSetTab}
             ragaId={ragaId}
             setRagaId={setRagaId}
-            settings={settings}
             setSettings={setSettings}
             activeKeys={activeKeys}
+            settings={settings}
             isPumping={isPumping}
             setPumping={setPumping}
             handlePointerDown={handlePointerDown}
