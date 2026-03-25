@@ -17,36 +17,10 @@ export default function Keyboard({ activeKeys, ragaId, handlePointerDown, handle
   const FullscreenIcon = isFullscreen ? Minimize2 : Maximize2;
 
   useEffect(() => {
-    if (!isFullscreen) {
-      if (document.fullscreenElement) {
-        document.exitFullscreen?.().catch(() => {});
-      }
-      window.screen?.orientation?.unlock?.();
-      return;
-    }
-
-    const section = sectionRef.current;
-    if (!section) {
-      return;
-    }
-
-    const enterFullscreen = async () => {
-      try {
-        if (!document.fullscreenElement) {
-          await section.requestFullscreen?.();
-        }
-      } catch (e) {}
-
-      try {
-        await window.screen?.orientation?.lock?.('landscape');
-      } catch (e) {}
-    };
-
-    enterFullscreen();
-
     const handleFullscreenExit = () => {
       if (!document.fullscreenElement) {
         setIsFullscreen(false);
+        window.screen?.orientation?.unlock?.();
       }
     };
 
@@ -54,7 +28,33 @@ export default function Keyboard({ activeKeys, ragaId, handlePointerDown, handle
     return () => {
       document.removeEventListener('fullscreenchange', handleFullscreenExit);
     };
-  }, [isFullscreen]);
+  }, []);
+
+  const toggleFullscreen = async () => {
+    const section = sectionRef.current;
+    if (!section) {
+      return;
+    }
+
+    if (document.fullscreenElement) {
+      try {
+        await document.exitFullscreen?.();
+      } catch (e) {}
+      window.screen?.orientation?.unlock?.();
+      setIsFullscreen(false);
+      return;
+    }
+
+    try {
+      await section.requestFullscreen?.();
+    } catch (e) {}
+
+    try {
+      await window.screen?.orientation?.lock?.('landscape');
+    } catch (e) {}
+
+    setIsFullscreen(true);
+  };
 
   return (
     <div ref={sectionRef} className={sectionClassName}>
@@ -62,7 +62,7 @@ export default function Keyboard({ activeKeys, ragaId, handlePointerDown, handle
         type="button"
         className="keyboard-fullscreen-btn"
         aria-label={isFullscreen ? 'Exit keyboard fullscreen' : 'Open keyboard fullscreen'}
-        onClick={() => setIsFullscreen((value) => !value)}
+        onClick={toggleFullscreen}
       >
         <FullscreenIcon size={18} />
       </button>

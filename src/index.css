@@ -1181,18 +1181,21 @@ input:checked + .slider:before { transform: translateX(22px); }
   }
 
   .keyboard-section-fullscreen {
+    --fullscreen-keyboard-height: min(calc(100vw - 24px), calc(100vh - 94px));
     position: fixed;
     inset: 0;
     z-index: 200;
     width: 100vw;
     height: 100vh;
+    box-sizing: border-box;
     padding: 64px 12px 18px;
     background:
       linear-gradient(180deg, rgba(35, 27, 22, 0.98), rgba(16, 12, 10, 0.99));
-    align-items: center;
-    justify-content: center;
-    overflow-x: auto;
+    align-items: stretch;
+    justify-content: flex-start;
     overflow-y: hidden;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
   }
 
   .keyboard-section-fullscreen .keyboard-fullscreen-btn {
@@ -1201,13 +1204,51 @@ input:checked + .slider:before { transform: translateX(22px); }
   }
 
   .keyboard-section-fullscreen .keyboard-container {
-    margin: auto;
+    margin: 0 auto;
     transform: none;
+    padding: 10px;
+    max-height: var(--fullscreen-keyboard-height);
+    height: var(--fullscreen-keyboard-height);
+    align-items: flex-start;
+    min-width: max-content;
+    box-sizing: border-box;
+  }
+
+  .keyboard-section-fullscreen .key {
+    padding-bottom: 18px;
+  }
+
+  .keyboard-section-fullscreen .key-white {
+    width: 54px;
+    height: calc(var(--fullscreen-keyboard-height) - 40px);
+  }
+
+  .keyboard-section-fullscreen .key-black {
+    width: 32px;
+    height: calc((var(--fullscreen-keyboard-height) - 40px) * 0.62);
+    margin-left: -16px;
+    margin-right: -16px;
+    padding-bottom: 10px;
+    font-size: 10px;
   }
 
   .keyboard-section-fullscreen.piano-keyboard-section {
     background:
       linear-gradient(180deg, rgba(26, 24, 22, 0.98), rgba(10, 10, 10, 0.99));
+  }
+
+  @media (orientation: portrait) {
+    .keyboard-section-fullscreen {
+      overflow: auto;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .keyboard-section-fullscreen .keyboard-container {
+      transform: rotate(90deg);
+      transform-origin: center center;
+      margin: auto;
+    }
   }
 
   .keyboard-container {
