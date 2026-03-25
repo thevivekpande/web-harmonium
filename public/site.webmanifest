@@ -1,0 +1,16 @@
+{
+  "name": "Harmonium Pro",
+  "short_name": "Harmonium",
+  "description": "A virtual Indian harmonium for riyaz, raga practice, and music learning.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FDF8ED",
+  "theme_color": "#37201D",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

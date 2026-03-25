@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { KEY_MAP } from './data/constants';
+import { KEY_MAP, LESSONS, RAGAS } from './data/constants';
 import { HarmoniumSynth } from './engine/HarmoniumSynth';
 
 // Components
@@ -16,6 +16,13 @@ import LessonDetail from './components/views/LessonDetail';
 import './index.css';
 
 const synth = new HarmoniumSynth();
+
+const setMetaTag = (selector, attribute, value) => {
+  const element = document.querySelector(selector);
+  if (element) {
+    element.setAttribute(attribute, value);
+  }
+};
 
 function App() {
   const [activeKeys, setActiveKeys] = useState(new Set());
@@ -93,6 +100,41 @@ function App() {
     synth.toggleDrone(settings.drone, settings.volume);
     synth.setVolume(settings.volume);
   }, [settings.drone, settings.volume]);
+
+  useEffect(() => {
+    const lesson = LESSONS.find((item) => item.id === activeLesson);
+    const raga = RAGAS.find((item) => item.id === ragaId);
+
+    const seoByTab = {
+      inventory: {
+        title: `${raga?.name || 'Virtual Harmonium'} | Harmonium Pro`,
+        description: raga?.id === 'free_play'
+          ? 'Play a virtual Indian harmonium online with responsive keys, drone controls, bellows feel, and guided raga practice.'
+          : `Practice Raag ${raga.name} on a virtual harmonium with scale highlighting, playable keys, and Indian classical learning support.`
+      },
+      library: {
+        title: 'Practice Library | Harmonium Pro',
+        description: 'Browse harmonium practice recordings including riyaz sessions, alap ideas, bandish references, and taal-focused improvisation.'
+      },
+      lessons: lesson ? {
+        title: `${lesson.title} | Harmonium Pro Lesson`,
+        description: lesson.desc
+      } : {
+        title: 'Harmonium Lessons | Harmonium Pro',
+        description: 'Learn harmonium fundamentals with beginner-friendly lessons on sargam, meend, gamak, and Indian classical taals.'
+      }
+    };
+
+    const seo = seoByTab[currentTab] || seoByTab.inventory;
+
+    document.title = seo.title;
+    setMetaTag('meta[name="description"]', 'content', seo.description);
+    setMetaTag('meta[name="keywords"]', 'content', 'virtual harmonium, online harmonium, indian classical music, raga practice, harmonium lessons, sargam, taal, riyaz');
+    setMetaTag('meta[property="og:title"]', 'content', seo.title);
+    setMetaTag('meta[property="og:description"]', 'content', seo.description);
+    setMetaTag('meta[name="twitter:title"]', 'content', seo.title);
+    setMetaTag('meta[name="twitter:description"]', 'content', seo.description);
+  }, [activeLesson, currentTab, ragaId]);
 
   const handlePointerDown = (key, freq) => {
     setActiveKeys(prev => new Set(prev).add(key));
